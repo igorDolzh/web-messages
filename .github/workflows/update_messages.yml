@@ -1,13 +1,11 @@
 name: Update messages
 
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 concurrency: 
   group: update_messages
   cancel-in-progress: true
 
-name: Update messages
 jobs:
   update-messages:
     name: Update messages
