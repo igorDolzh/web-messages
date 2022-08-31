@@ -1,0 +1,60 @@
+name: Update messages
+
+on:
+  workflow_dispatch
+
+concurrency: 
+  group: update_messages
+  cancel-in-progress: true
+
+name: Update messages
+jobs:
+  update-messages:
+    name: Update messages
+    runs-on: [self-hosted, universal]
+    steps:
+      - uses: navikt/github-app-token-generator@v1
+        id: gettoken
+        with:
+          private-key: ${{ secrets.GH_DEPLOY_APP_PRIVATE_KEY }}
+          app-id: 56219
+
+      - uses: actions/checkout@v2.3.4
+        with:
+          token: ${{steps.gettoken.outputs.token}}
+          ref: ${{ github.head_ref }}
+
+      - name: Lokalise file pull
+        id: lokalise_pull
+        uses: pleo-io/actions/lokalise-file-pull@v10.0.0
+        with:
+          # Api token for the Lokalise account
+          # with read/write access to the project
+          api-token: ${{ secrets.LOCALIZE_TOKEN }}
+
+          # ID of the project to sync
+          project-id: ${{ secrets.LOCALIZE_PROJECT }}
+
+          # The relative file path where language files will be found
+          file-path: messages/%LANG_ISO%/messages.%FORMAT%
+
+          # Download options for https://app.lokalise.com/api2docs/curl/#transition-download-files-post
+          download-options: '{"format":"json", "export_sort": "a_z", "include_comments": false, "include_description": false, "original_filenames": false }'
+
+      - run: |
+          git config --global user.email "api@pleo.io"
+          git config --global user.name "localisation-bot"
+          git rev-parse --abbrev-ref HEAD
+          git add .
+          git commit -m "Update pulled messages"
+          git push
+
+      - name: 'Automated Version Bump'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@608cab1205a5560a93eb66b4a64e4acf2119597b'
+        env:
+          GITHUB_TOKEN: ${{steps.gettoken.outputs.token}}
+
+      - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
