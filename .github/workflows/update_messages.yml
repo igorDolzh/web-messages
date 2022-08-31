@@ -9,7 +9,7 @@ concurrency:
 jobs:
   update-messages:
     name: Update messages
-    runs-on: [self-hosted, universal]
+    runs-on: ubuntu-latest
     steps:
       - uses: navikt/github-app-token-generator@v1
         id: gettoken
