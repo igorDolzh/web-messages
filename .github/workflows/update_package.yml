@@ -48,14 +48,13 @@ jobs:
           previews: 'flash-preview, ant-man-preview, machine-man-preview'
           script: |
             const runId = github.run_id
+            console.log(runId)
             core.setOutput('runId', runId)
 
       - uses: finnp/create-file-action@76e2826db048c29ab0955dd7728016657363fb3a
         env:
           FILE_NAME: "temp_messages/package.json"
           FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.3\"}"
-
-      
 
       - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
         with:
