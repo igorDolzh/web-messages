@@ -34,7 +34,7 @@ jobs:
           project-id: ${{ secrets.LOCALIZE_PROJECT }}
 
           # The relative file path where language files will be found
-          file-path: messages/%LANG_ISO%/messages.%FORMAT%
+          file-path: temp_messages/%LANG_ISO%/messages.%FORMAT%
 
           # Download options for https://app.lokalise.com/api2docs/curl/#transition-download-files-post
           download-options: '{"format":"json", "export_sort": "a_z", "include_comments": false, "include_description": false, "original_filenames": false }'
@@ -52,9 +52,12 @@ jobs:
 
       - uses: finnp/create-file-action@76e2826db048c29ab0955dd7728016657363fb3a
         env:
-          FILE_NAME: "messages/package.json"
+          FILE_NAME: "temp_messages/package.json"
           FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.3\"}"
+
+      
 
       - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          package: './temp_messages/package.json'
