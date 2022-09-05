@@ -52,10 +52,15 @@ jobs:
             console.log('runNumber', runNumber)
             console.log('version', version)
 
-            const runNumber2= 7854
+            const runNumber2= '7854'
             const version2 = `${+runNumber2.slice(0,-4)}.${+runNumber2.slice(-4, -2)}.${+runNumber2.slice(-4, -2)}`
             console.log('runNumber', runNumber2)
             console.log('version', version2)
+
+            const runNumber3= context.runNumber
+            const version3 = `${+runNumber3.slice(0,-4)}.${+runNumber3.slice(-4, -2)}.${+runNumber3.slice(-4, -2)}`
+            console.log('runNumber', runNumber3)
+            console.log('version', version3)
 
             core.setOutput('runId', context.runNumber)
 
