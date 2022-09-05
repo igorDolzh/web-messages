@@ -49,15 +49,15 @@ jobs:
           script: |
             const runNumber= 9724587624587
             const versionMajor = runNumber > 10000 ? runNumber / 10000 : 0
-            const versionMinor = runNumber > 100 ? runNumber / 100 : 0
+            const versionMinor = runNumber > 100 ? runNumber  % 10000 / 100 : 0
             const versionPatch = runNumber % 100
             const version = `${versionMajor}.${versionMinor}.${versionPatch}`
             console.log('runNumber', runNumber)
             console.log('version', version)
 
             const runNumber2= 7854
-            const versionMajor2 = runNumber2 > 10000 ? runNumber / 10000 : 0
-            const versionMinor2 = runNumber2 > 100 ? runNumber / 100 : 0
+            const versionMajor2 = runNumber2 > 10000 ? runNumber2 / 10000 : 0
+            const versionMinor2 = runNumber2 > 100 ? runNumber2 % 10000 / 100 : 0
             const versionPatch2 = runNumber2 % 100
             const version2 = `${versionMajor2}.${versionMinor2}.${versionPatch2}`
             console.log('runNumber', runNumber2)
