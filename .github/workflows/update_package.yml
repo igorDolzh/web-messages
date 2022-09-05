@@ -47,12 +47,13 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           previews: 'flash-preview, ant-man-preview, machine-man-preview'
           script: |
-            core.setOutput('runId', '123')
+            const runId = github.run_id
+            core.setOutput('runId', runId)
 
-      - uses: "finnp/create-file-action@master"
-            env:
-              FILE_NAME: "messages/package.json"
-              FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.2\"}"
+      - uses: finnp/create-file-action@master
+        env:
+          FILE_NAME: "messages/package.json"
+          FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.2\"}"
 
       - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
         with:
