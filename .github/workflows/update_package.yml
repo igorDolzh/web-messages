@@ -50,10 +50,10 @@ jobs:
             const runId = github.run_id
             core.setOutput('runId', runId)
 
-      - uses: finnp/create-file-action@master
+      - uses: finnp/create-file-action@76e2826db048c29ab0955dd7728016657363fb3a
         env:
           FILE_NAME: "messages/package.json"
-          FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.2\"}"
+          FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.3\"}"
 
       - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
         with:
