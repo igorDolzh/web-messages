@@ -1,0 +1,60 @@
+name: Update package
+
+on: workflow_dispatch
+
+concurrency: 
+  group: update_package
+  cancel-in-progress: true
+
+jobs:
+  update-package:
+    name: Update package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: navikt/github-app-token-generator@v1
+        id: gettoken
+        with:
+          private-key: ${{ secrets.GH_DEPLOY_APP_PRIVATE_KEY }}
+          app-id: 56219
+
+      - uses: actions/checkout@v2.3.4
+        with:
+          token: ${{steps.gettoken.outputs.token}}
+          ref: ${{ github.head_ref }}
+
+      - name: Lokalise file pull
+        id: lokalise_pull
+        uses: pleo-io/actions/lokalise-file-pull@v10.0.0
+        with:
+          # Api token for the Lokalise account
+          # with read/write access to the project
+          api-token: ${{ secrets.LOCALIZE_TOKEN }}
+
+          # ID of the project to sync
+          project-id: ${{ secrets.LOCALIZE_PROJECT }}
+
+          # The relative file path where language files will be found
+          file-path: messages/%LANG_ISO%/messages.%FORMAT%
+
+          # Download options for https://app.lokalise.com/api2docs/curl/#transition-download-files-post
+          download-options: '{"format":"json", "export_sort": "a_z", "include_comments": false, "include_description": false, "original_filenames": false }'
+
+
+      - name: Get runId
+        uses: actions/github-script@v4.0.2
+        id: runId
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          previews: 'flash-preview, ant-man-preview, machine-man-preview'
+          script: |
+            const runId = +github.run_id
+            core.setOutput('runId', runId)
+
+      - uses: "finnp/create-file-action@master"
+            env:
+              FILE_NAME: "messages/package.json"
+              FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.2\"}"
+
+      - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
