@@ -40,34 +40,24 @@ jobs:
           download-options: '{"format":"json", "export_sort": "a_z", "include_comments": false, "include_description": false, "original_filenames": false }'
 
 
-      - name: Get runId
+      - name: Get version
         uses: actions/github-script@v4.0.2
-        id: runId
+        id: runNumber
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           previews: 'flash-preview, ant-man-preview, machine-man-preview'
           script: |
-            const runNumber= '9724587624587'
+            const runNumber= `${context.runNumber}`
             const version = `${+runNumber.slice(0,-4)}.${+runNumber.slice(-4, -2)}.${+runNumber.slice(-2)}`
             console.log('runNumber', runNumber)
             console.log('version', version)
 
-            const runNumber2= '7854'
-            const version2 = `${+runNumber2.slice(0,-4)}.${+runNumber2.slice(-4, -2)}.${+runNumber2.slice(-2)}`
-            console.log('runNumber', runNumber2)
-            console.log('version', version2)
-
-            const runNumber3= `${context.runNumber}`
-            const version3 = `${+runNumber3.slice(0,-4)}.${+runNumber3.slice(-4, -2)}.${+runNumber3.slice(-2)}`
-            console.log('runNumber', runNumber3)
-            console.log('version', version3)
-
-            core.setOutput('runId', context.runNumber)
+            core.setOutput('version', version)
 
       - uses: finnp/create-file-action@76e2826db048c29ab0955dd7728016657363fb3a
         env:
           FILE_NAME: "temp_messages/package.json"
-          FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"0.0.3\"}"
+          FILE_DATA: "{\"name\": \"web-messages\", \"version\": \"${{steps.runNumber.outputs.version}}\"}"
 
       - uses: JS-DevTools/npm-publish@e42e3720bfe21259120218c19fdbfedcf72692bd
         with:
