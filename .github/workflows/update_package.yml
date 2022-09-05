@@ -47,7 +47,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           previews: 'flash-preview, ant-man-preview, machine-man-preview'
           script: |
-            const runId = github.run_id
+            const runId = context.runId
             console.log(runId)
             core.setOutput('runId', runId)
 
