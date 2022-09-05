@@ -47,24 +47,17 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           previews: 'flash-preview, ant-man-preview, machine-man-preview'
           script: |
-            const runNumber= 9724587624587
-            const versionMajor = runNumber > 10000 ? runNumber / 10000 : 0
-            const versionMinor = runNumber > 100 ? runNumber  % 10000 / 100 : 0
-            const versionPatch = runNumber % 100
-            const version = `${versionMajor}.${versionMinor}.${versionPatch}`
+            const runNumber= '9724587624587'
+            const version = `${+runNumber.slice(0,-4)}.${+runNumber.slice(-4, -2)}.${+runNumber.slice(-4, -2)}`
             console.log('runNumber', runNumber)
             console.log('version', version)
 
             const runNumber2= 7854
-            const versionMajor2 = runNumber2 > 10000 ? runNumber2 / 10000 : 0
-            const versionMinor2 = runNumber2 > 100 ? runNumber2 % 10000 / 100 : 0
-            const versionPatch2 = runNumber2 % 100
-            const version2 = `${versionMajor2}.${versionMinor2}.${versionPatch2}`
+            const version2 = `${+runNumber2.slice(0,-4)}.${+runNumber2.slice(-4, -2)}.${+runNumber2.slice(-4, -2)}`
             console.log('runNumber', runNumber2)
             console.log('version', version2)
 
-
-            core.setOutput('runId', runNumber)
+            core.setOutput('runId', context.runNumber)
 
       - uses: finnp/create-file-action@76e2826db048c29ab0955dd7728016657363fb3a
         env:
