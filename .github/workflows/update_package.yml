@@ -44,8 +44,6 @@ jobs:
         uses: actions/github-script@v4.0.2
         id: runNumber
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          previews: 'flash-preview, ant-man-preview, machine-man-preview'
           script: |
             const runNumber= `${context.runNumber}`
             const version = `${+runNumber.slice(0,-4)}.${+runNumber.slice(-4, -2)}.${+runNumber.slice(-2)}`
