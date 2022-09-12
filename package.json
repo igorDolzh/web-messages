@@ -1,4 +1,8 @@
 {
     "name": "web-messages",
-    "version": "0.0.2"
+    "version": "0.0.2",
+    "dependencies": {
+        "@lokalise/node-api": "^8.0.1",
+        "web-messages": "^0.0.16"
+    }
 }
